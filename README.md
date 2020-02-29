@@ -1,0 +1,3 @@
+# Discord Factorio Manager
+
+WIP

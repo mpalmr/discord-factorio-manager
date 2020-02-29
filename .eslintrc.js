@@ -10,6 +10,7 @@ module.exports = {
 		indent: [2, 'tab'],
 		'no-tabs': 0,
 		'no-console': 0,
+		'arrow-parens': [2, 'as-needed'],
 	},
 	overrides: [
 		{

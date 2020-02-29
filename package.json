@@ -13,6 +13,7 @@
   "dependencies": {
     "columnify": "^1.5.4",
     "discord.js": "^11.5.1",
+    "docker-cli-js": "^2.7.1",
     "dotenv": "^8.2.0"
   },
   "devDependencies": {

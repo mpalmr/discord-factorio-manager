@@ -15,7 +15,7 @@ client.on('message', ({ channel, content }) => {
 	if (commandPattern.test(content)) {
 		const [commandName, ...args] = content.trim().slice(1).split(/\s+/g);
 		const command = commands[commandName];
-		if (command) command(args);
+		if (command) command(channel, args);
 		else channel.send('Command not found.');
 	}
 });

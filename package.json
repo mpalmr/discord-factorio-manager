@@ -1,0 +1,23 @@
+{
+  "name": "discord-factorio-manager",
+  "version": "0.1.0",
+  "description": "Discord bot for managing docker containers for factorio instances",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon --inspect index.js",
+    "test": "jest"
+  },
+  "author": "Matthew Palmer <mspalmer@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  }
+}

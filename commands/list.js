@@ -1,10 +1,10 @@
 'use strict';
 
 const columnify = require('columnify');
+const codeblock = require('../utils/codeblock');
 
 module.exports = async function listCommand(channel) {
-	channel.send(`\`\`\`
-${columnify(
+	channel.send(codeblock(columnify(
 		[
 			{
 				instance: 'Vanilla',
@@ -19,7 +19,5 @@ ${columnify(
 			columns: ['instance', 'status'],
 			columnSplitter: '    ',
 		},
-	)}
-\`\`\`
-	`);
+	)));
 };

@@ -11,7 +11,8 @@
   "author": "Matthew Palmer <mspalmer@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "eslint": "^6.1.0",

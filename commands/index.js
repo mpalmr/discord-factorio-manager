@@ -2,7 +2,7 @@
 
 const list = require('./list');
 
-const listCommand = (channel) => list(channel);
+const listCommand = channel => list(channel);
 
 module.exports = {
 	list: listCommand,

@@ -1,12 +1,11 @@
 'use strict';
 
-const { dockerCommand } = require('docker-cli-js');
 const columnify = require('columnify');
+const dockerList = require('../docker/list');
 const codeblock = require('../utils/codeblock');
 
 module.exports = async function listCommand(channel) {
-	console.log(await dockerCommand('ps -a', { echo: false })
-		.then(containers => containers.filter(container => container.image === 'factoriotools/factorio')));
+	console.log(await dockerList());
 	channel.send(codeblock(columnify(
 		[
 			{

@@ -11,9 +11,15 @@ const client = new Discord.Client();
 const docker = new Docker({ echo: process.env.NODE_ENV !== 'production' });
 
 client.once('ready', () => {
-	fs
-		.mkdir(path.resolve('containers/mount'), { recursive: true })
-		.catch(error => (error.code === 'EEXIST' ? error : Promise.reject(error)));
+	Promise.all([
+		docker.command('pull factoriotools/factorio'),
+		fs
+			.mkdir(path.resolve('volumes'), { recursive: true })
+			.catch(error => (error.code === 'EEXIST' ? error : Promise.reject(error))),
+	]).catch(error => {
+		console.error(error);
+		process.exit(1);
+	});
 });
 
 client.on('message', ({ channel, content }) => {

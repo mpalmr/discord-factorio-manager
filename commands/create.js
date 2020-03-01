@@ -21,13 +21,12 @@ module.exports = async function createCommand({ channel, docker }, name) {
 			factoriotools/factorio
 		`))
 		.then(({ containerId }) => docker.command(`stop ${containerId}`))
-		.then(result => {
-			console.log(result);
+		.then(() => {
 			channel.send('Game created.');
-			return result;
+			return null;
 		})
 		.catch(error => {
-			if (error.code) {
+			if (error.code === 'EEXISTS') {
 				channel.send('Game by that name already exists.');
 				return null;
 			}

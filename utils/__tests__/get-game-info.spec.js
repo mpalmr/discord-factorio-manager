@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs').promises;
-const getInstanceInfo = require('../get-instance-info');
+const getGameInfo = require('../get-game-info');
 
 jest.mock('fs', () => ({
 	promises: {
@@ -22,7 +22,7 @@ EXPOSE 34197/tcp
 
 VOLUME /opt/factorio/vanilla /factorio`);
 
-	return getInstanceInfo('mockInstanceName').then(result => {
+	return getGameInfo('mockInstanceName').then(result => {
 		expect(result).toEqual({
 			name: 'mockInstanceName',
 			port: 34197,
@@ -36,30 +36,42 @@ test('Gets all instances', async () => {
 	fs.readFile.mockImplementation(async filePath => {
 		const name = filePath.split('/')[filePath.split('/').length - 1];
 		if (name === 'one.Dockerfile') {
-			return `FROM factoriotools/factorio
+			return `
+FROM factoriotools/factorio
 
 EXPOSE 34197/udp
 EXPOSE 34197/tcp
 
-VOLUME /opt/factorio/one /factorio`;
+VOLUME /opt/factorio/one /factorio
+
+ENTRYPOINT ["/bin/sh -c \\"mkdir -p /opt/factorio/one && chown -R 845:845 /opt/factorio/one && exec /docker-entrypoint.sh\\""]
+`.trim();
 		}
 		if (name === 'two.Dockerfile') {
-			return `FROM factoriotools/factorio
+			return `
+FROM factoriotools/factorio
 
 EXPOSE 34297/udp
 EXPOSE 34297/tcp
 
-VOLUME /opt/factorio/two /factorio`;
+VOLUME /opt/factorio/two /factorio
+
+ENTRYPOINT ["/bin/sh -c \\"mkdir -p /opt/factorio/two && chown -R 845:845 /opt/factorio/two && exec /docker-entrypoint.sh\\""]
+`.trim();
 		}
-		return `FROM factoriotools/factorio
+		return `
+FROM factoriotools/factorio
 
 EXPOSE 34397/udp
 EXPOSE 34397/tcp
 
-VOLUME /opt/factorio/three /factorio`;
+VOLUME /opt/factorio/three /factorio
+
+ENTRYPOINT ["/bin/sh -c \\"mkdir -p /opt/factorio/two && chown -R 845:845 /opt/factorio/two && exec /docker-entrypoint.sh\\""]
+`.trim();
 	});
 
-	return getInstanceInfo().then(result => {
+	return getGameInfo().then(result => {
 		expect(fs.readFile).toHaveBeenCalledTimes(3);
 		expect(result).toEqual([
 			{

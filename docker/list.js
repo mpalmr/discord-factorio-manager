@@ -1,8 +1,6 @@
 'use strict';
 
-const docker = require('./docker');
-
-module.exports = async function dockerList() {
+module.exports = async function dockerList({ docker }) {
 	return docker.command('ps -a')
 		.then(({ containerList }) => containerList
 			.filter(container => container.image === 'factoriotools/factorio'));

@@ -1,52 +1,71 @@
 'use strict';
 
+const { promisify } = require('util');
 const path = require('path');
 const fs = require('fs').promises;
-const { build } = require('../docker');
+const rimrafCb = require('rimraf');
+const getGameInfo = require('../utils/get-game-info');
+const codeblock = require('../utils/codeblock');
 
-// TODO: Improve
-async function getNextPort() {
-	return Promise.all(fs.readdir(path.resolve('containers')))
-		.then(files => files
-			.map(file => file.split('\n')
-				.find(line => line.slice(0, 6) === 'EXPOSE'))
-			.map(portLine => portLine
-				.split(' ')[1]
-				.split('/')[0])
-			.map(port => parseInt(port, 10)))
-		.then(ports => Math.max(ports) + 1);
-}
+const rimraf = promisify(rimrafCb);
 
-module.exports = async function createCommand(channel, name) {
+const FACTORIO_TCP_PORT = 27015;
+const FACTORIO_UDP_PORT = 34197;
+
+module.exports = async function createCommand({ channel, docker }, name) {
 	// Validation
-	if (!(/^[a-z\d-]{4,}$/i.test(name))) {
+	if (!(/^[a-z\d-]{4,}$/.test(name))) {
 		channel.send(
-			'Invalid name parameter. Must contain 4 or more alphanumeric characters or dashes.'
+			'Invalid name parameter. Must contain 4 or more alphanumeric characters or dashes.',
 		);
+		return null;
 	}
 
-	return Promise.all(fs.readdir(path.resolve('containers')));
+	const games = await getGameInfo().catch(error => {
+		channel.send('Unable to read game listing.');
+		return Promise.reject(error);
+	});
+	if (games.some(game => game.name === name)) {
+		channel.send('A game with that name already exists.');
+		return null;
+	}
+
 	// Execute command
-	const port = await getNextPort();
+	const contents = `
+FROM factoriotools/factorio
+
+EXPOSE ${FACTORIO_TCP_PORT}/tcp
+EXPOSE ${FACTORIO_UDP_PORT}/udp
+
+VOLUME "/opt/factorio/${name}" "/factorio"
+`.trim();
+
 	const dockerFilePath = path.resolve(`containers/${name}.Dockerfile`);
+	const mountPath = path.resolve(`containers/mount/${name}`);
+	const hostPort = Math.max(games.map(game => game.port)) + 1;
 
-	const contents = `FROM factoriotools/factorio
+	channel.send(`Creating container '${name}'.`);
 
-EXPOSE ${port}/tcp
-EXPOSE ${port}/udp
-
-VOLUME /opt/factorio/${name} /factorio`;
-
-	return fs.access(path.resolve(dockerFilePath))
-		.then(() => Promise.all([
-			fs.writeFile(dockerFilePath, contents),
-			fs.mkdir(path.resolve(`/opt/factorio/${name}`)),
-		]))
-		.then(() => build(name))
-		.then(console.log)
+	return Promise.all([
+		fs.writeFile(dockerFilePath, contents),
+		fs.mkdir(path.resolve(`containers/mount/${name}`)),
+	])
+		.then(() => docker.command(`build -f ${dockerFilePath} -t factorio:${name} .`))
+		.then(() => docker.command(`
+			run -it \ --name ${name} -d \
+				-p ${hostPort}:${FACTORIO_TCP_PORT}/tcp \
+				-p ${hostPort}:${FACTORIO_UDP_PORT}/udp \
+				factorio:${name}
+		`))
+		.then(() => docker.command(`stop ${name}`))
 		.catch(error => {
-			if (error.code !== 'EEXIST') Promise.reject(error);
-			channel.send('Instance by that name already exists.');
-			return null;
+			console.error(error);
+			channel.send('Could not create container.');
+			channel.send(codeblock(error.message));
+			return Promise.all([
+				fs.unlink(dockerFilePath),
+				rimraf(mountPath),
+				docker.command(`rm ${name}`),
+			]);
 		});
 };

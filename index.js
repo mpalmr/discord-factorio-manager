@@ -1,21 +1,24 @@
 'use strict';
 
 require('dotenv').config();
+const fs = require('fs').promises;
+const path = require('path');
 const Discord = require('discord.js');
 const commands = require('./commands');
 
 const client = new Discord.Client();
 
 client.once('ready', () => {
-	console.log('Ready!');
+	fs
+		.mkdir(path.resolve('containers'))
+		.catch(error => (error.code === 'EEXIST' ? error : Promise.reject(error)));
 });
 
-const commandPattern = new RegExp(`^\\s*${process.env.COMMAND_PREFIX}`);
 client.on('message', ({ channel, content }) => {
-	if (commandPattern.test(content)) {
+	if (new RegExp(`^\\s*${process.env.COMMAND_PREFIX}`).test(content)) {
 		const [commandName, ...args] = content.trim().slice(1).split(/\s+/g);
 		const command = commands[commandName];
-		if (command) command(args);
+		if (command) command(channel, args);
 		else channel.send('Command not found.');
 	}
 });

@@ -8,3 +8,7 @@ jest.mock('fs', () => ({
 		writeFile: jest.fn(),
 	},
 }));
+
+test('a', () => {
+	expect(true).toBe(true);
+});

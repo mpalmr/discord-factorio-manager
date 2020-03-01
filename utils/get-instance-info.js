@@ -16,8 +16,8 @@ function getInstanceContents(name) {
 	}));
 }
 
-exports.getInstanceInfo = async function getInstanceInfo(name) {
+module.exports = async function getInstanceInfo(name) {
 	return name
-		? getInstanceContents(name)
+		? getInstanceContents(`${name}.Dockerfile`)
 		: fs.readdir(containersPath).then(names => Promise.all(names.map(getInstanceContents)));
 };

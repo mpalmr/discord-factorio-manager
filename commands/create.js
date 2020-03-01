@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs').promises;
+const { VOLUMES_PATH } = require('../constants');
 
 module.exports = async function createCommand({ channel, docker }, name) {
 	if (!(/^[a-z\d-]{4,}$/.test(name))) {
@@ -11,7 +12,7 @@ module.exports = async function createCommand({ channel, docker }, name) {
 		return null;
 	}
 
-	const volumePath = path.resolve(`volumes/${name}`);
+	const volumePath = path.join(VOLUMES_PATH, name);
 	return fs.mkdir(volumePath)
 		.then(() => docker.command(`build -t ${process.env.DOCKER_TAG} .`))
 		.then(() => docker.command(`run -dP \

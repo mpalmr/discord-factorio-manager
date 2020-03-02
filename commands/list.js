@@ -8,14 +8,14 @@ const codeblock = require('../utils/codeblock');
 function parsePorts(ports) {
 	return ports
 		.split(', ')
-		.find(port => port.includes('tcp'))
+		.find(port => /tcp$/.test(port))
 		.split(':')[1]
 		.split('->')[0];
 }
 
 module.exports = async function listCommand({ channel, docker }) {
 	return Promise.all([
-		fs.readdir(VOLUMES_PATH).then(volumes => volumes),
+		fs.readdir(VOLUMES_PATH),
 		docker.command('ps -a').then(({ containerList }) => containerList),
 	])
 		.then(([volumeNames, containers]) => containers
@@ -31,5 +31,9 @@ module.exports = async function listCommand({ channel, docker }) {
 				columns: ['id', 'name', 'status', 'url'],
 			})));
 			return gameInfo;
+		})
+		.catch(error => {
+			channel.send('Unable to list games.');
+			return Promise.reject(error);
 		});
 };

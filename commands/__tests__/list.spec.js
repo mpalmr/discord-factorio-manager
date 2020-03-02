@@ -70,20 +70,20 @@ test('Successful listing', async () => {
 		{
 			id: 'mockId1',
 			name: 'one',
+			host: '159.65.219.33:32771',
 			status: 'online',
-			url: '159.65.219.33:32771',
 		},
 		{
 			id: 'mockId3',
 			name: 'two',
+			host: '159.65.219.33:34771',
 			status: 'offline',
-			url: '159.65.219.33:34771',
 		},
 		{
 			id: 'mockId4',
 			name: 'three',
+			host: '159.65.219.33:35771',
 			status: 'online',
-			url: '159.65.219.33:35771',
 		},
 	]);
 });

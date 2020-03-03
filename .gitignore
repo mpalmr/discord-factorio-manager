@@ -22,3 +22,4 @@ npm-debug.log*
 
 # Project specific
 /volumes
+/logs/*.log

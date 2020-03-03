@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon --inspect index.js",
-    "test": "jest"
+		"test": "jest -c tests/jest.config.js",
+		"clean": "rm -rf volumes/* logs/*.log"
   },
   "author": "Matthew Palmer <mspalmer@gmail.com>",
   "license": "MIT",
@@ -14,7 +15,8 @@
     "columnify": "^1.5.4",
     "discord.js": "^11.5.1",
     "docker-cli-js": "^2.7.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^6.1.0",

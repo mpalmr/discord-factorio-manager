@@ -13,7 +13,7 @@ function parsePorts(ports) {
 		.split('->')[0];
 }
 
-module.exports = async function listCommand({ channel, docker }) {
+module.exports = async function listCommand({ channel, docker, logger }) {
 	return Promise.all([
 		fs.readdir(VOLUMES_PATH),
 		docker.command('ps -a').then(({ containerList }) => containerList),
@@ -35,7 +35,7 @@ module.exports = async function listCommand({ channel, docker }) {
 			return gameInfo;
 		})
 		.catch(error => {
+			logger.error(error);
 			channel.send('Unable to list games.');
-			return Promise.reject(error);
 		});
 };

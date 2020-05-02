@@ -18,17 +18,6 @@ beforeEach(() => {
 	mockDocker.command.mockClear();
 });
 
-test('Sends message to channel on any error', async () => {
-	const mockError = new Error('mockError');
-	fs.readdir.mockRejectedValue(mockError);
-	mockDocker.command.mockRejectedValue(mockError);
-
-	return listCommand({ channel: mockChannel, docker: mockDocker }).catch(errors => {
-		expect(errors).toEqual(mockError);
-		expect(mockChannel.send).toHaveBeenCalledWith('Unable to list games.');
-	});
-});
-
 test('Successful listing', async () => {
 	fs.readdir.mockResolvedValue(['one', 'two', 'three']);
 	mockDocker.command.mockResolvedValue({

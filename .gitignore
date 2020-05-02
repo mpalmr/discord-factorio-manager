@@ -2,6 +2,7 @@
 node_modules
 .next
 /dist
+!/**/.gitkeep
 
 # local env files
 .env

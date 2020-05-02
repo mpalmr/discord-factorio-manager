@@ -4,25 +4,26 @@
   "description": "Discord bot for managing docker containers for factorio instances",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon --inspect index.js",
-		"test": "jest -c tests/jest.config.js",
-		"clean": "rm -rf volumes/* logs/*.log"
+    "start": "NODE_ENV=production node --unhandled-rejections=strict src",
+    "dev": "NODE_ENV=development nodemon --inspect --unhandled-rejections=strict src",
+    "test": "NODE_ENV=test jest",
+    "clean": "rm -rf volumes/* logs/*.log"
   },
   "author": "Matthew Palmer <mspalmer@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "columnify": "^1.5.4",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.2.0",
     "docker-cli-js": "^2.7.1",
     "dotenv": "^8.2.0",
+    "node-schedule": "^1.3.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "jest": "^25.1.0",
-    "nodemon": "^2.0.2"
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "jest": "^25.5.4",
+    "nodemon": "^2.0.3"
   }
 }

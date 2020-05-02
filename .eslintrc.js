@@ -11,6 +11,7 @@ module.exports = {
 		'no-tabs': 0,
 		'no-console': 0,
 		'arrow-parens': [2, 'as-needed'],
+		'prefer-destructuring': 0,
 	},
 	overrides: [
 		{

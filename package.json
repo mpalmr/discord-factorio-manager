@@ -4,8 +4,8 @@
   "description": "Discord bot for managing docker containers for factorio instances",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node --unhandled-rejections=strict src",
-    "dev": "NODE_ENV=development nodemon --inspect --unhandled-rejections=strict src",
+    "start": "NODE_ENV=production node --unhandled-rejections=strict index",
+    "dev": "NODE_ENV=development nodemon --inspect --unhandled-rejections=strict index",
     "test": "NODE_ENV=test jest",
     "clean": "rm -rf volumes/* logs/*.log"
   },

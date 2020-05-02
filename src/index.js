@@ -1,33 +1,36 @@
 'use strict';
 
-require('dotenv').config();
 const Discord = require('discord.js');
 const { Docker } = require('docker-cli-js');
 const schedule = require('node-schedule');
 const commands = require('./commands');
 const createLogger = require('./logger');
 
-const client = new Discord.Client();
-const docker = new Docker({ echo: false });
-const logger = createLogger();
+module.exports = function createDiscordFactorioManager() {
+	const client = new Discord.Client();
+	const docker = new Docker({ echo: false });
+	const logger = createLogger();
 
-client.once('ready', () => {
-	commands.update({ docker, logger });
-	schedule.scheduleJob({ minute: 0 }, () => commands.update({ docker, logger }));
-});
+	client.once('ready', () => {
+		commands.update({ docker, logger });
+		schedule.scheduleJob({ minute: 0 }, () => commands.update({ docker, logger }));
+	});
 
-client.on('message', ({ channel, content }) => {
-	if (new RegExp(`^\\s*${process.env.COMMAND_PREFIX}`).test(content)) {
-		const [commandName, ...args] = content.trim().slice(1).split(/\s+/g);
-		const command = commands[commandName];
-		if (!command) channel.send('Command not found.');
-		else {
-			command({ channel, docker, logger }, args).catch(error => {
-				logger.error(error);
-				channel.send('There was an error processing your request.');
-			});
+	client.on('message', ({ channel, content }) => {
+		if (new RegExp(`^\\s*${process.env.COMMAND_PREFIX}`).test(content)) {
+			const [commandName, ...args] = content.trim().slice(1).split(/\s+/g);
+			const command = commands[commandName];
+			if (!command) channel.send('Command not found.');
+			else {
+				command({ channel, docker, logger }, args).catch(error => {
+					logger.error(error);
+					channel.send('There was an error processing your request.');
+				});
+			}
 		}
-	}
-});
+	});
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+	client.login(process.env.DISCORD_BOT_TOKEN);
+
+	return client;
+};

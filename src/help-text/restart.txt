@@ -1,0 +1,3 @@
+Usage: ~restart <name>
+
+Restarts a running game instance

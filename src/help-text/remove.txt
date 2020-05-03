@@ -1,0 +1,3 @@
+Usage: ~remove <name>
+
+Removes a game instance and all save files associated with it

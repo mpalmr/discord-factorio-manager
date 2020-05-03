@@ -1,9 +1,10 @@
 'use strict';
 
-const createStatusCommand = require('./create-status-command');
+const help = require('./help');
 const list = require('./list');
 const create = require('./create');
 const remove = require('./remove');
+const createStatusCommand = require('./create-status-command');
 
 const start = createStatusCommand('start');
 const stop = createStatusCommand('stop');
@@ -11,6 +12,7 @@ const stop = createStatusCommand('stop');
 const removeCommand = (deps, [name]) => remove(deps, name);
 
 module.exports = {
+	help: (deps, [name]) => help(deps, name),
 	list,
 	ls: list,
 	start: (deps, [name]) => start(deps, name),

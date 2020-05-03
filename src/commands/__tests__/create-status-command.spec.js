@@ -1,9 +1,6 @@
 'use strict';
 
-const fs = require('fs').promises;
 const createStatusCommand = require('../create-status-command');
-
-jest.mock('fs');
 
 const channel = { send: jest.fn() };
 const docker = { command: jest.fn() };
@@ -13,7 +10,6 @@ const logger = {
 };
 
 beforeEach(() => {
-	fs.readdir.mockClear();
 	channel.send.mockClear();
 	docker.command.mockClear();
 	logger.info.mockClear();
@@ -21,7 +17,6 @@ beforeEach(() => {
 });
 
 test('If container does not exist send message', async () => {
-	fs.readdir.mockResolvedValue([]);
 	const startCommand = createStatusCommand('start');
 
 	await expect(startCommand({ channel, docker, logger }, 'mockname')).resolves.toBeNull();
@@ -29,7 +24,6 @@ test('If container does not exist send message', async () => {
 });
 
 test('If container cannot start send message', async () => {
-	fs.readdir.mockResolvedValue(['a', 'mockname', 'b']);
 	docker.command.mockRejectedValue(new Error('mockError'));
 	const startCommand = createStatusCommand('start');
 
@@ -39,7 +33,6 @@ test('If container cannot start send message', async () => {
 });
 
 test('If container does exist start container and send message', async () => {
-	fs.readdir.mockResolvedValue(['a', 'mockname', 'b']);
 	docker.command.mockResolvedValue('mockStatusResult');
 	const startCommand = createStatusCommand('start');
 
@@ -51,7 +44,6 @@ test('If container does exist start container and send message', async () => {
 
 describe('Other statuses', () => {
 	test('Cannot stop game that does not exist', async () => {
-		fs.readdir.mockResolvedValue(['a', 'mockname', 'b']);
 		docker.command.mockRejectedValue(new Error('mockStopError'));
 		const stopCommand = createStatusCommand('stop');
 
@@ -60,7 +52,6 @@ describe('Other statuses', () => {
 	});
 
 	test('Successful stop message', async () => {
-		fs.readdir.mockResolvedValue(['a', 'mockname', 'b']);
 		docker.command.mockResolvedValue('mockStatusResult');
 		const stopCommand = createStatusCommand('stop');
 

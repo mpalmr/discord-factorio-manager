@@ -2,17 +2,41 @@
 
 const codeblock = require('../utils/codeblock');
 
-const listHelpText = ``;
+const listHelpText = `
+Usage: ~list
 
-const removeHelpText = ``;
+Lists all game instances and their status
+`;
+
+const removeHelpText = `
+Usage: ~remove <name>
+
+Removes a game instance and all save files associated with it
+`;
 
 const commandHelpText = {
 	list: listHelpText,
 	ls: listHelpText,
-	create: ``,
-	start: ``,
-	stop: ``,
-	restart: ``,
+	create: `
+Usage: ~create <name>
+
+Creates game instance
+	`,
+	start: `
+Usage: ~create <name>
+
+Starts a game instance
+`,
+	stop: `
+Usage: ~create <name>
+
+Stops a running game instance
+`,
+	restart: `
+Usage: ~create <name>
+
+Restarts a running game instance
+`,
 	remove: removeHelpText,
 	rm: removeHelpText,
 };

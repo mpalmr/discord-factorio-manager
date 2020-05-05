@@ -13,5 +13,5 @@ module.exports = async function getHelpText() {
 		.map(name => fs.readFile(path.join(HELP_TEXT_PATH, name), 'utf-8')
 			.then(contents => ({ name, contents }))));
 
-	return fileContents.reduce((acc, { name, contents }) => ({ [name]: contents }), {});
+	return fileContents.reduce((acc, { name, contents }) => ({ ...acc, [name]: contents }), {});
 };

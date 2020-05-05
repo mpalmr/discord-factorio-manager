@@ -6,6 +6,7 @@ const schedule = require('node-schedule');
 const createDiscordFactorioManager = require('..');
 const commands = require('../commands');
 const createLogger = require('../logger');
+const getHelpText = require('../help-text');
 
 jest.mock('discord.js', () => ({
 	Client: class Client {
@@ -25,6 +26,7 @@ jest.mock('../commands', () => ({
 	commandTwo: jest.fn().mockResolvedValue(),
 }));
 jest.mock('../logger', () => jest.fn());
+jest.mock('../help-text', () => jest.fn());
 
 const channel = { send: jest.fn() };
 
@@ -33,6 +35,7 @@ beforeEach(() => {
 	commands.commandOne.mockClear();
 	commands.commandTwo.mockClear();
 	createLogger.mockClear();
+	getHelpText.mockClear();
 	channel.send.mockClear();
 });
 
@@ -46,8 +49,8 @@ describe('Message handler', () => {
 		Object.assign(process.env, { COMMAND_PREFIX: '~' });
 	});
 
-	beforeEach(() => {
-		client = createDiscordFactorioManager();
+	beforeEach(async () => {
+		client = await createDiscordFactorioManager();
 		messageHandler = client.on.mock.calls[0][1];
 	});
 

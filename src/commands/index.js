@@ -4,6 +4,7 @@ const help = require('./help');
 const list = require('./list');
 const create = require('./create');
 const remove = require('./remove');
+const useVersion = require('./use-version');
 const createStatusCommand = require('./create-status-command');
 
 const start = createStatusCommand('start');
@@ -21,4 +22,6 @@ module.exports = {
 	create: (deps, [name]) => create(deps, name),
 	remove: removeCommand,
 	rm: removeCommand,
+	useVersion: (deps, [name, version]) => useVersion(deps, name, version),
+	update: (deps, [name]) => useVersion(deps, name, 'latest'),
 };

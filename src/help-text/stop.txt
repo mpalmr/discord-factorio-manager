@@ -1,3 +1,0 @@
-Usage: ~stop <name>
-
-Stops a running game instance

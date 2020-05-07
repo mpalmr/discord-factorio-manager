@@ -1,3 +1,0 @@
-Usage: ~create <name>
-
-Starts a game instance

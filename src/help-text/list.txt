@@ -1,3 +1,0 @@
-Usage: ~list
-
-Lists all game instances and their status

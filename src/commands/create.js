@@ -39,6 +39,7 @@ module.exports = async function createCommand({ channel, docker, logger }, name)
 				channel.send('Game by that name already exists.');
 				return null;
 			}
+			channel.send('Game could not be created.');
 			logger.error(error);
 			await fs.rmdir(volumePath).catch(logger.error);
 			return Promise.reject(error);

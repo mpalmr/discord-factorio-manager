@@ -1,9 +1,9 @@
 'use strict';
 
-const createStatusCommand = require('./create-status-command');
 const list = require('./list');
 const create = require('./create');
 const remove = require('./remove');
+const createStatusCommand = require('./create-status-command');
 
 const start = createStatusCommand('start');
 const stop = createStatusCommand('stop');

@@ -18,8 +18,10 @@ module.exports = async function createCommand({ channel, docker, logger }, name)
 		.then(buildResult => {
 			logger.info(buildResult);
 			return docker.command(`run -dP \
-				-v ${volumePath}:/factorio \
 				--name ${name} \
+				-v ${volumePath}:/factorio \
+				-e ENABLE_SERVER_LOAD_LATEST=false \
+				-e ENABLE_GENERATE_NEW_MAP_SAVE=true \
 				--restart=always \
 				factoriotools/factorio
 			`);
@@ -37,6 +39,7 @@ module.exports = async function createCommand({ channel, docker, logger }, name)
 				channel.send('Game by that name already exists.');
 				return null;
 			}
+			channel.send('Game could not be created.');
 			logger.error(error);
 			await fs.rmdir(volumePath).catch(logger.error);
 			return Promise.reject(error);

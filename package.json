@@ -6,7 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production node --unhandled-rejections=strict index",
     "dev": "NODE_ENV=development nodemon --inspect --unhandled-rejections=strict index",
-    "test": "NODE_ENV=test jest",
+		"test": "npm run lint && npm run test:unit",
+		"test:unit": "NODE_ENV=test jest",
+		"lint": "eslint src",
     "clean": "rm -rf volumes/* logs/*.log"
   },
   "author": "Matthew Palmer <mspalmer@gmail.com>",

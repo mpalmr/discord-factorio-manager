@@ -6,14 +6,16 @@ const schedule = require('node-schedule');
 const commands = require('./commands');
 const createLogger = require('./logger');
 
-module.exports = function createDiscordFactorioManager() {
+module.exports = async function createDiscordFactorioManager() {
 	const client = new Discord.Client();
 	const docker = new Docker({ echo: false });
 	const logger = createLogger();
 
 	client.once('ready', () => {
-		commands.update({ docker, logger });
-		schedule.scheduleJob({ minute: 0 }, () => commands.update({ docker, logger }));
+		// Update image
+		schedule.scheduleJob({ minute: 0 }, () => () => {
+			// Update image
+		});
 	});
 
 	client.on('message', ({ channel, content }) => {

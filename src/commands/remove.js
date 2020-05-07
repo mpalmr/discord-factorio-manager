@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = async function removeCommand({ channel, docker, logger }, name) {
-	const rmResult = await docker.command(`docker rm -vf ${name.trim()}`);
+	const rmResult = await docker.command(`rm -vf ${name.trim()}`);
 
 	if (rmResult.raw === name) {
 		channel.send('Removal successful.');

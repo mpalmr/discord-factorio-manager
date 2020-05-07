@@ -28,10 +28,15 @@ module.exports = async function listCommand({ channel, docker }) {
 			})));
 
 	const rows = games.map(({ id, ...game }) => game);
-	channel.send(codeblock(columnify(rows, {
-		columns: ['name', 'host', 'status'],
-		columnSplitter: '    ',
-	})));
+
+	if (rows.length) {
+		channel.send(codeblock(columnify(rows, {
+			columns: ['name', 'host', 'status'],
+			columnSplitter: '    ',
+		})));
+	} else {
+		channel.send('No instance have been created yet.');
+	}
 
 	return games;
 };

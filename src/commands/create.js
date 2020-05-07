@@ -5,7 +5,7 @@ const fs = require('fs').promises;
 const { VOLUMES_PATH } = require('../constants');
 
 module.exports = async function createCommand({ channel, docker, logger }, name) {
-	if (!(/^[a-z\d-]{4,}$/.test(name))) {
+	if (!(/^[a-z\d_-]{4,}$/.test(name))) {
 		channel.send(
 			'Invalid name parameter. Must contain 4 or more alphanumeric characters or dashes.',
 		);

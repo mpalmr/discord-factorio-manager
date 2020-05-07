@@ -18,13 +18,13 @@ module.exports = async function createDiscordFactorioManager() {
 		});
 	});
 
-	client.on('message', ({ channel, content }) => {
+	client.on('message', async ({ channel, content }) => {
 		if (new RegExp(`^\\s*${process.env.COMMAND_PREFIX}`).test(content)) {
 			const [commandName, ...args] = content.trim().slice(1).split(/\s+/g);
 			const command = commands[commandName];
 			if (!command) channel.send('Command not found.');
 			else {
-				command({ channel, docker, logger }, args).catch(error => {
+				return command({ channel, docker, logger }, args).catch(error => {
 					logger.error(error);
 					channel.send('There was an error processing your request.');
 				});

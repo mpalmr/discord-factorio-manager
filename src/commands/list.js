@@ -34,9 +34,7 @@ module.exports = async function listCommand({ channel, docker }) {
 			columns: ['name', 'host', 'status'],
 			columnSplitter: '    ',
 		})));
-	} else {
-		channel.send('No instance have been created yet.');
-	}
+	} else channel.send('No instance have been created yet.');
 
 	return games;
 };

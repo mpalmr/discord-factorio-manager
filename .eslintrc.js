@@ -15,8 +15,14 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: ['**/__tests__/*.spec.js', '**/__mocks__/*.js'],
+			files: [
+				'**/jest.setup.js',
+				'**/__tests__/*.spec.js',
+				'**/__mocks__/*.js',
+				'tests/**/*.spec.js',
+			],
 			env: { jest: true },
+			globals: { client: true },
 		},
 	],
 };

@@ -25,6 +25,7 @@ module.exports = async function createDiscordFactorioManager() {
 			if (!command) channel.send('Command not found.');
 			else {
 				return command({ channel, docker, logger }, args).catch(error => {
+					console.error(error);
 					logger.error(error);
 					channel.send('There was an error processing your request.');
 				});

@@ -3,6 +3,7 @@
 module.exports = function createStatusCommand(status) {
 	return async ({ channel, docker, logger }, name) => {
 		const statusResult = await docker.command(`${status} ${name}`).catch(error => {
+			console.error(error);
 			logger.error(error);
 			channel.send(`Could not ${status} game.`);
 			return null;

@@ -6,6 +6,7 @@ const { Docker } = require('docker-cli-js');
 const createCommand = require('../src/commands/create');
 
 const GAME_NAME = 'create-command-test123';
+const testVolumePath = path.resolve(`volumes/${GAME_NAME}`);
 
 let docker;
 const logger = {
@@ -14,17 +15,15 @@ const logger = {
 };
 const channel = { send: jest.fn() };
 
-const testVolumePath = path.resolve(`volumes/${GAME_NAME}`);
-
 beforeAll(() => {
 	docker = new Docker({ echo: false });
 });
 
 beforeEach(() => {
-	logger.info.mockClear();
-	logger.error.mockClear();
-	channel.send.mockClear();
+	jest.clearAllMocks();
 });
+
+afterAll(async () => fs.unlink(testVolumePath));
 
 test('Input validation', async () => {
 	expect(createCommand({ channel, docker, logger }, '$24jks')).resolves.toBeNull();
@@ -39,5 +38,3 @@ test('Successful creation', async () => {
 	expect(channel.send).toHaveBeenCalledWith('Game created.');
 	await expect(fs.access(testVolumePath)).rejects.toBeInstanceOf(Error);
 });
-
-afterAll(async () => fs.unlink(testVolumePath));
